@@ -3,6 +3,19 @@ from telebot import types
 
 bot = telebot.TeleBot("5384669677:AAHepwAcMJWbcoesDOtC3jiqzty3ztsbGR8")
 
+docker_install = types.InlineKeyboardMarkup()
+docker_1 = types.InlineKeyboardButton(text='Step 0: Requirements | Wallet', callback_data='0')  # кнопка «Да»
+docker_install.add(docker_1)
+docker_2 = types.InlineKeyboardButton(text='Step 1: Installing necessary server tools', callback_data='1')
+docker_install.add(docker_2)
+docker_3 = types.InlineKeyboardButton(text='Step 2: Check | Open necessary TCP ports', callback_data='2')
+docker_install.add(docker_3)
+docker_4 = types.InlineKeyboardButton(text='Step 3: Configure your config', callback_data='3')
+docker_install.add(docker_4)
+docker_5 = types.InlineKeyboardButton(text='Step 4: Set up and run your nodes', callback_data='4')
+docker_install.add(docker_5)
+chose_install = 'Choose the installation step:'
+
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -44,9 +57,17 @@ def callback_worker(call):
         bot_mes = 'Choose the installation type:'
         bot.send_message(call.message.chat.id, text=bot_mes, reply_markup=keyboard)
 
-    if call.data == 'req':
+    elif call.data == 'req':
         bot_mes = "CPU: 2 Core+\nRAM: 4GB+(Rec. 8GB)\nStorage: 150 GB"
         bot.send_message(call.message.chat.id, bot_mes)
+
+    elif call.data == 'faq':
+        keyboard = types.InlineKeyboardMarkup()  # наша клавиатура
+        key_sub_info = types.InlineKeyboardButton(text='What is Subpsace?', callback_data='sub_info')  # кнопка «Да»
+        keyboard.add(key_sub_info)  # добавляем кнопку в клавиатуру
+        key_farmer_info = types.InlineKeyboardButton(text='Who is Farmer?', callback_data='farmer_info')
+        keyboard.add(key_farmer_info)
+
 
     elif call.data == "docker":
         keyboard = types.InlineKeyboardMarkup()
@@ -70,34 +91,35 @@ def callback_worker(call):
         - RAM: 4GB+(Rec. 8GB)
         - Storage: 150 GB
         
-        *Wallets*
-        Before running anything you need to have a wallet where you'll receive testnet coins. 
-        There are currently two wallets we suggest using, *SubWallet* being the preferred route.
-        - [SubWallet](https://subwallet.app/)
-        - [PolkadotJS](https://polkadot.js.org/extension/)
-        Install one of the two wallets above into your browser and create a new account there or you can use your address from previous stress-test. The address of your account will be necessary at the last step.
+*Wallets*
+Before running anything you need to have a wallet where you'll receive testnet coins. 
+There are currently two wallets we suggest using, *SubWallet* being the preferred route.
+- [SubWallet](https://subwallet.app/)
+- [PolkadotJS](https://polkadot.js.org/extension/)
+Install one of the two wallets above into your browser and create a new account there or you can use your address from previous stress-test. The address of your account will be necessary at the last step.
         """
 
         markdown_2 = """
         *For PolkadotJS wallet*
-        To get the wallet address, go to https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Feu-2.gemini-2a.subspace.network%2Fws#/accounts and click on the icon
+To get the wallet address, go to https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Feu-2.gemini-2a.subspace.network%2Fws#/accounts and click on the icon
         """
         img = open('polka.png', 'rb')
 
         bot.send_message(call.message.chat.id, markdown, parse_mode="Markdown")
         bot.send_message(call.message.chat.id, markdown_2, parse_mode="Markdown")
         bot.send_photo(call.message.chat.id, img)
+        bot.send_message(call.message.chat.id, text=chose_install, reply_markup=docker_install)
 
     elif call.data == '1':
         markdown = """
         *Update and install useful tools, copy and past this command into your terminal:*
-        ```
-        sudo apt update && sudo apt install mc wget htop jq git curl -y
-        ```
+```
+sudo apt update && sudo apt install mc wget htop jq git curl -y
+```
 *Install Docker, copy and past this command into your terminal:*
-        ```
-        curl -s https://raw.githubusercontent.com/razumv/helpers/main/tools/install_docker.sh | bash
-        ```
+```
+curl -s https://raw.githubusercontent.com/razumv/helpers/main/tools/install_docker.sh | bash
+```
         """
         bot.send_message(call.message.chat.id, markdown, parse_mode="Markdown")
 
@@ -159,9 +181,9 @@ echo -e "SUBSPACE_RELEASE > ${SUBSPACE_RELEASE}"
         Here is the final step!
 *Create `subspace` dir and pull the config:*
         ```
-        cd ~
-        mkdir subspace && cd subspace
-        wget https://raw.githubusercontent.com/swel4ik/subspace_docker_config/main/docker-compose.yml
+cd ~
+mkdir subspace && cd subspace
+wget https://raw.githubusercontent.com/swel4ik/subspace_docker_config/main/docker-compose.yml
         ```
 *Run your nodes!*
 `docker-compose up -d`
