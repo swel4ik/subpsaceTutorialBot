@@ -1,7 +1,8 @@
 import telebot
 from telebot import types
+from telebot.async_telebot import AsyncTeleBot
 
-bot = telebot.TeleBot("5384669677:AAHepwAcMJWbcoesDOtC3jiqzty3ztsbGR8")
+bot = AsyncTeleBot("5384669677:AAHepwAcMJWbcoesDOtC3jiqzty3ztsbGR8")
 
 docker_install = types.InlineKeyboardMarkup()
 docker_1 = types.InlineKeyboardButton(text='Step 0: Requirements | Wallet', callback_data='0')  # кнопка «Да»
@@ -67,7 +68,7 @@ def callback_worker(call):
         keyboard.add(key_sub_info)  # добавляем кнопку в клавиатуру
         key_farmer_info = types.InlineKeyboardButton(text='Who is Farmer?', callback_data='farmer_info')
         keyboard.add(key_farmer_info)
-
+        bot.send_message(call.message.chat.id, text='FAQ', reply_markup=keyboard)
 
     elif call.data == "docker":
         keyboard = types.InlineKeyboardMarkup()
@@ -81,6 +82,8 @@ def callback_worker(call):
         keyboard.add(docker_4)
         docker_5 = types.InlineKeyboardButton(text='Step 4: Set up and run your nodes', callback_data='4')
         keyboard.add(docker_5)
+        docker_logs = types.InlineKeyboardButton(text='Check logs', callback_data='5')
+        keyboard.add(docker_logs)
         bot_mes = 'Choose the installation step:'
         bot.send_message(call.message.chat.id, text=bot_mes, reply_markup=keyboard)
 
@@ -190,8 +193,43 @@ wget https://raw.githubusercontent.com/swel4ik/subspace_docker_config/main/docke
         """
         bot.send_message(call.message.chat.id, markdown, parse_mode="Markdown")
 
+    elif call.data == '5':
+        markdown = """
+*To check the node logs run the command:*
+`docker-compose -f $HOME/subspace_docker/docker-compose.yml logs -f --tail=100 node`
+
+*To check the farmer logs run the command:*
+`docker-compose -f $HOME/subspace_docker/docker-compose.yml logs -f --tail=100 farmer`
+
+*To restart a subspace node:*
+`docker-compose -f $HOME/subspace_docker/docker-compose.yml restart node`
+
+*To restart a subspace farmer:*
+`docker-compose -f $HOME/subspace_docker/docker-compose.yml restart farmer`
+
+*To stop node and farmer:*
+`docker-compose -f $HOME/subspace_docker/docker-compose.yml down -v`
+            """
+        bot.send_message(call.message.chat.id, markdown, parse_mode="Markdown")
+        keyboard = types.InlineKeyboardMarkup()
+        logs_screen = types.InlineKeyboardButton(text='Successfully logs', callback_data='logs_screen')  # кнопка «Да»
+        keyboard.add(logs_screen)
+        bot.send_message(call.message.chat.id, text='Show example of successfully logs', reply_markup=keyboard)
+
+
+    elif call.data == 'logs_screen':
+        node_mes = 'Example of node successfully logs: ⤵'
+        node_img = open('Screenshot_6.png', 'rb')
+        bot.send_message(call.message.chat.id, node_mes)
+        bot.send_photo(call.message.chat.id, node_img)
+
+        farmer_mes = 'Example of farmer successfully logs: ⤵'
+        farmer_img = open('Screenshot_5.png', 'rb')
+        bot.send_message(call.message.chat.id, farmer_mes)
+        bot.send_photo(call.message.chat.id, farmer_img)
+
     elif call.data == "linux":
-        bot.send_message(call.message.chat.id, "Ok, let's try!")
+        bot.send_message(call.message.chat.id, "Coming soon")
 
 
 bot.infinity_polling()
