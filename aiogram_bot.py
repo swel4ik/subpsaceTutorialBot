@@ -6,6 +6,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from messages import BotMessages
+from keyboards import BotKeyboards
 
 logging.basicConfig(level=logging.INFO)
 # Объект бота
@@ -13,17 +14,13 @@ bot = Bot(token="5384669677:AAHepwAcMJWbcoesDOtC3jiqzty3ztsbGR8")
 # Диспетчер
 dp = Dispatcher(bot=bot)
 bot_messages = BotMessages()
+bot_keyboard = BotKeyboards()
 
 
 @dp.message_handler(commands=["start"])
 async def cmd_start(message: types.Message):
-    kb = [
-        [types.KeyboardButton(text='📡Set up your nodes📡')],
-        [types.KeyboardButton(text='🛠Machine requirements🛠')],
-        [types.KeyboardButton(text='❓FAQ❓')]
-    ]
     keyboard = types.ReplyKeyboardMarkup(
-        keyboard=kb,
+        keyboard=bot_keyboard.start_kb,
         resize_keyboard=True,
         input_field_placeholder="Choose"
     )
@@ -33,14 +30,8 @@ async def cmd_start(message: types.Message):
 @dp.message_handler(Text(contains='📡Set up your nodes📡'))
 async def with_puree(message: types.Message):
     await message.reply("Got it", reply_markup=types.ReplyKeyboardRemove())
-    kb = [
-        [types.KeyboardButton(text='Docker 🐳')],
-        [types.KeyboardButton(text='Linux CLI 🖥')],
-        [types.KeyboardButton(text='Windows 🏙')]
-    ]
-
     keyboard = types.ReplyKeyboardMarkup(
-        keyboard=kb,
+        keyboard=bot_keyboard.installation_type_kb,
         resize_keyboard=True,
         input_field_placeholder="Choose installation type"
     )
@@ -49,16 +40,8 @@ async def with_puree(message: types.Message):
 
 @dp.message_handler(Text(contains='Docker 🐳'))
 async def with_puree(message: types.Message):
-    kb = [
-        [types.KeyboardButton(text='Step 0: Requirements | Wallet')],
-        [types.KeyboardButton(text='Step 1: Installing necessary server tools')],
-        [types.KeyboardButton(text='Step 2: Check | Open necessary TCP ports')],
-        [types.KeyboardButton(text='Step 3: Configure your nodes')],
-        [types.KeyboardButton(text='Step 4: Set up and run your nodes')],
-        [types.KeyboardButton(text='Check logs')]
-    ]
     keyboard = types.ReplyKeyboardMarkup(
-            keyboard=kb,
+            keyboard=bot_keyboard.docker_steps_kb,
             resize_keyboard=True,
             input_field_placeholder="Choose installation step"
         )
