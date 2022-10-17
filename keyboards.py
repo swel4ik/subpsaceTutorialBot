@@ -24,5 +24,12 @@ class BotKeyboards:
             [types.KeyboardButton(text='Step 2: Check | Open necessary TCP ports')],
             [types.KeyboardButton(text='Step 3: Configure your nodes')],
             [types.KeyboardButton(text='Step 4: Set up and run your nodes')],
-            [types.KeyboardButton(text='Check logs')]
+            [types.KeyboardButton(text='Logs example')],
+            [types.KeyboardButton(text='Docker update')]
+
+        ]
+
+        self.docker_logs_kb = [
+            [types.KeyboardButton(text='Example of node successfully logs 📡')],
+            [types.KeyboardButton(text='Example of farmer successfully logs 👨‍🌾')]
         ]

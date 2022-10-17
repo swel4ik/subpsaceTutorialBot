@@ -1,7 +1,16 @@
+import requests
+import json
+from datetime import datetime, timezone
+
+
 class BotMessages:
 
     def __init__(self):
         """Constructor"""
+        req = requests.get('https://api.github.com/repos/subspace/subspace/releases')
+        data = json.loads(req.text)
+        self.current_release = data[0]['tag_name']
+        self.current_date = datetime.now(timezone.utc).date()
         self.docker_messages = {
 
             'Step_0_0':
@@ -66,7 +75,7 @@ Rerun the check commands to be ensure that you've opened the ports
 `REWARD_WALLET_ADDRESS="YOUR_WALLET_ADDRESS"` - your own wallet address from Step 0
 `NODE_NAME="YOUR_NODE_NAME"` - desired name that will be shown in telemetry (doesn't impact anything else)
 `FARMER_PLOT_SIZE="100G"` - you can set lesser value, but maximum for this stress-test is 100G
-`SUBSPACE_RELEASE="LATEST_RELEASE_NAME"` - the latest release; in the following format example: `snapshot-2022-apr-29`
+`SUBSPACE_RELEASE="LATEST_RELEASE_NAME"` - the latest release;
 *Save the variables, reload the `.bash_profile` and check:*
 ```
 echo "export REWARD_WALLET_ADDRESS="${REWARD_WALLET_ADDRESS}"" >> $HOME/.bash_profile
@@ -84,7 +93,8 @@ echo -e "SUBSPACE_RELEASE > ${SUBSPACE_RELEASE}"
             
 ❗️❗️❗️You can check the latest release with this link: https://github.com/subspace/subspace/releases
 """,
-            'Step_3_1': "Example of latest release (you should copy the name in red square): ⤵",
+            'Step_3_1': f'''The latest release for `{self.current_date}` (UTC): 
+`{self.current_release}`''',
 
             'Step_4':
 
@@ -102,18 +112,31 @@ wget https://raw.githubusercontent.com/swel4ik/subspace_docker_config/main/docke
 
                 """
 *To check the node logs run the command:*
-`docker-compose -f $HOME/subspace_docker/docker-compose.yml logs -f --tail=100 node`
+`docker-compose -f $HOME/subspace/docker-compose.yml logs -f --tail=100 node`
 
 *To check the farmer logs run the command:*
-`docker-compose -f $HOME/subspace_docker/docker-compose.yml logs -f --tail=100 farmer`
+`docker-compose -f $HOME/subspace/docker-compose.yml logs -f --tail=100 farmer`
 
 *To restart a subspace node:*
-`docker-compose -f $HOME/subspace_docker/docker-compose.yml restart node`
+`docker-compose -f $HOME/subspace/docker-compose.yml restart node`
 
 *To restart a subspace farmer:*
-`docker-compose -f $HOME/subspace_docker/docker-compose.yml restart farmer`
+`docker-compose -f $HOME/subspace/docker-compose.yml restart farmer`
 
 *To stop node and farmer:*
-`docker-compose -f $HOME/subspace_docker/docker-compose.yml down -v`
+`docker-compose -f $HOME/subspace/docker-compose.yml down -v`
+""",
+
+            'Docker_update':
+
+                f"""
+*First stop your nodes:*
+`docker-compose -f $HOME/subspace/docker-compose.yml down -v`
+*Change subspace release:*
+`echo "export SUBSPACE_RELEASE="{self.current_release}"" >> $HOME/.bash_profile`
+*Update profile:*
+`source $HOME/.bash_profile`
+*Run your nodes:*
+`cd $HOME/subspace && docker-compose up -d`
 """
         }

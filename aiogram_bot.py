@@ -71,8 +71,6 @@ async def with_puree(message: types.Message):
 async def with_puree(message: types.Message):
     await message.answer(bot_messages.docker_messages['Step_3_0'], parse_mode="Markdown")
     await message.answer(bot_messages.docker_messages['Step_3_1'], parse_mode="Markdown")
-    release_img = open('media/release_ex.png', 'rb')
-    await bot.send_photo(message.chat.id, release_img)
 
 
 @dp.message_handler(Text(contains='Step 4: Set up and run your nodes'))
@@ -80,17 +78,11 @@ async def with_puree(message: types.Message):
     await message.answer(bot_messages.docker_messages['Step_4'], parse_mode="Markdown")
 
 
-@dp.message_handler(Text(contains='Check logs'))
+@dp.message_handler(Text(contains='Logs example'))
 async def with_puree(message: types.Message):
     await message.answer(bot_messages.docker_messages['logs'], parse_mode="Markdown")
-
-    kb = [
-        [types.KeyboardButton(text='Example of node successfully logs 📡')],
-        [types.KeyboardButton(text='Example of farmer successfully logs 👨‍🌾')]
-    ]
-
     keyboard = types.ReplyKeyboardMarkup(
-        keyboard=kb,
+        keyboard=bot_keyboard.docker_logs_kb,
         resize_keyboard=True
     )
 
@@ -107,6 +99,11 @@ async def with_puree(message: types.Message):
 async def with_puree(message: types.Message):
     farmer_img = open('media/farmer_ex.png', 'rb')
     await bot.send_photo(message.chat.id, farmer_img)
+
+
+@dp.message_handler(Text(contains='Docker update'))
+async def with_puree(message: types.Message):
+    await message.answer(bot_messages.docker_messages['Docker_update'], parse_mode="Markdown")
 
 
 @dp.message_handler(Text(contains='🛠Machine requirements🛠'))
