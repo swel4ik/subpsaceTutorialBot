@@ -106,7 +106,7 @@ Install one of the two wallets above into your browser and create a new account 
         *For PolkadotJS wallet*
 To get the wallet address, go to https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Feu-2.gemini-2a.subspace.network%2Fws#/accounts and click on the icon
         """
-        img = open('polka.png', 'rb')
+        img = open('media/wallet_ex.png', 'rb')
 
         bot.send_message(call.message.chat.id, markdown, parse_mode="Markdown")
         bot.send_message(call.message.chat.id, markdown_2, parse_mode="Markdown")
@@ -171,7 +171,7 @@ echo -e "SUBSPACE_RELEASE > ${SUBSPACE_RELEASE}"
             """
 # TODO success screen
         release_mes = 'Example of latest release (you should copy the name in red square): ⤵'
-        release_img = open('Screenshot_12.png', 'rb')
+        release_img = open('media/release_ex.png', 'rb')
 
 
         bot.send_message(call.message.chat.id, markdown, parse_mode="Markdown")
@@ -219,12 +219,12 @@ wget https://raw.githubusercontent.com/swel4ik/subspace_docker_config/main/docke
 
     elif call.data == 'logs_screen':
         node_mes = 'Example of node successfully logs: ⤵'
-        node_img = open('Screenshot_6.png', 'rb')
+        node_img = open('media/node_ex.png', 'rb')
         bot.send_message(call.message.chat.id, node_mes)
         bot.send_photo(call.message.chat.id, node_img)
 
         farmer_mes = 'Example of farmer successfully logs: ⤵'
-        farmer_img = open('Screenshot_5.png', 'rb')
+        farmer_img = open('media/farmer_ex.png', 'rb')
         bot.send_message(call.message.chat.id, farmer_mes)
         bot.send_photo(call.message.chat.id, farmer_img)
 
