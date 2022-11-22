@@ -1,12 +1,15 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types
+from aiogram.dispatcher import FSMContext
+from aiogram.types import ReplyKeyboardRemove
 from aiogram.utils import executor
-from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher.filters import Text, state
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from messages import BotMessages
 from keyboards import BotKeyboards
+from utils import BotStates
 
 logging.basicConfig(level=logging.INFO)
 # Объект бота
@@ -18,13 +21,22 @@ bot_keyboard = BotKeyboards()
 
 
 @dp.message_handler(commands=["start"])
-async def cmd_start(message: types.Message):
+async def cmd_start(message: types.Message, state: FSMContext):
     keyboard = types.ReplyKeyboardMarkup(
         keyboard=bot_keyboard.start_kb,
         resize_keyboard=True,
         input_field_placeholder="Choose"
     )
     await message.answer("What you are interested in?", reply_markup=keyboard)
+    await state.set_state(BotStates.main_menu)
+
+
+@dp.message_handler(Text(contains='Cancel'))
+async def with_puree(message: types.Message):
+    await message.answer(
+        text="Ok, see you next time",
+        reply_markup=ReplyKeyboardRemove()
+    )
 
 
 @dp.message_handler(Text(contains='📡Set up your nodes📡'))
