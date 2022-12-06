@@ -1,15 +1,14 @@
 from aiogram import Router
-from aiogram.dispatcher.filters.text import Text
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram import types
 from aiogram.types import ReplyKeyboardRemove
 from aiogram.dispatcher.fsm.context import FSMContext
 from messages import BotMessages
 from keyboards import BotKeyboards
-from utils import BotStates
+from utils import BotStates, InstallIssues
 
 bot_messages = BotMessages()
 bot_keyboard = BotKeyboards()
+issues = InstallIssues()
 router = Router()  # [1]
 
 
@@ -27,8 +26,19 @@ async def with_puree(message: types.Message, state: FSMContext):
     await message.reply(bot_mes, reply_markup=ReplyKeyboardRemove())
 
 
+@router.message(state=BotStates.user_problem)
+async def problem_state(message: types.Message):
+    problem_text = message.text.lower()
+
+    if 'is invalid because' or 'it should be an array' in problem_text:
+        await message.reply(issues.docker_invalid_type)
+
+    await message.reply('Второй!')
+
+
 @router.message()
-async def echo_message(msg: types.Message, ):
+async def echo_message(msg: types.Message, state: FSMContext):
+    cur_state = state.get_state()
     text = '''
 Current supported testnet: Gemini 3
 Write /start for installation tutorial
@@ -60,7 +70,6 @@ async def send_random_value(callback: types.CallbackQuery, state: FSMContext):
     await state.set_state(BotStates.req_info)
     await callback.message.answer("CPU: 2 Core+\nRAM: 4GB+(Rec. 8GB)\nStorage: 150 GB")
     await callback.answer()
-
 
 # @router.message(Text(text='Back ◀️'))
 # async def with_puree(message: types.Message, state: FSMContext):
