@@ -1,12 +1,8 @@
 from aiogram import Router
-from aiogram.dispatcher.filters.text import Text
-from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram import types
-from aiogram.types import ReplyKeyboardRemove
 from aiogram.dispatcher.fsm.context import FSMContext
 from messages import BotMessages
 from keyboards import BotKeyboards
-from utils import BotStates
 from aiogram.types import FSInputFile
 from aiogram.methods.send_photo import SendPhoto
 

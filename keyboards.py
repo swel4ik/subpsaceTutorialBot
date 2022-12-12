@@ -5,7 +5,7 @@ class BotKeyboards:
 
     def __init__(self):
         """Constructor"""
-
+        self.language_kb = []
         self.start_kb = [
             [types.InlineKeyboardButton(text='📡Set up your nodes📡')],
             [types.InlineKeyboardButton(text='🛠Machine requirements🛠')],
@@ -73,7 +73,7 @@ class BotKeyboards:
             [types.InlineKeyboardButton(text="❌Cancel❌", callback_data="cancel")],
         ]
 
-        keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+        keyboard = types.InlineKeyboardMarkup(inline_keyboard =buttons)
         return keyboard
 
     def get_docker_logs_kb(self):
