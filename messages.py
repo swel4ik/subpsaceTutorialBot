@@ -140,3 +140,15 @@ wget https://raw.githubusercontent.com/swel4ik/subspace_docker_config/main/docke
 `cd $HOME/subspace && docker-compose up -d`
 """
         }
+
+        self.subspace_messages = {
+            'Step_1':
+                """
+*Update and install useful tools, copy and past this command into your terminal:*
+```
+sudo apt update && sudo apt install mc wget htop jq git curl -y
+```
+ """,
+        }
+
+

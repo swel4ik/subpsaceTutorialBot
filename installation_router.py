@@ -16,3 +16,11 @@ async def docker_installation(callback: types.CallbackQuery, state: FSMContext):
     await state.set_state(BotStates.choosing_docker_steps)
     await state.update_data(menu='installation_step')
     await callback.answer()
+
+
+@router.callback_query(text='subspace_cli')
+async def docker_installation(callback: types.CallbackQuery, state: FSMContext):
+    await callback.message.answer("Choose installation step", reply_markup=bot_keyboard.get_docker_installation_kb())
+    await state.set_state(BotStates.choosing_subspace_cli_steps)
+    await state.update_data(menu='installation_step_subspace')
+    await callback.answer()

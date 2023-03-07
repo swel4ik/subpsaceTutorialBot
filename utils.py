@@ -5,6 +5,7 @@ class BotStates(StatesGroup):
     main_menu = State()
     choosing_installation_type = State()
     choosing_docker_steps = State()
+    choosing_subspace_cli_steps = State()
     user_problem = State()
     req_info = State()
 
